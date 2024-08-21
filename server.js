@@ -19,6 +19,31 @@ function parseEnvList(env) {
 // Set up rate-limiting to avoid abuse of the public CORS Anywhere server.
 var checkRateLimit = require('./lib/rate-limit')(process.env.CORSANYWHERE_RATELIMIT);
 
+// Determine if logging is enabled via environment variable
+var enableRequestLogging = process.env.ENABLE_REQUEST_LOGGING === 'true';
+
+function requestResponseLogger(req, res, next){
+  // Import `util` only within this function
+  var util = require('util');
+
+  // Log the incoming request
+  console.log('\n=== Incoming Request ===');
+  console.log('Method: ' + req.method);
+  console.log('URL: ' + req.url);
+  console.log('Headers:', util.inspect(req.headers, {depth: null, colors: true}));
+
+  // Wrap the `res.end` function to log the outgoing response
+  var originalEnd = res.end;
+  res.end = function (){
+    console.log('\n=== Outgoing Response ===');
+    console.log('Status: ' + res.statusCode);
+    console.log('Headers:', util.inspect(res.getHeaders(), {depth: null, colors: true}));
+    originalEnd.apply(res, arguments); // Use `arguments` to ensure compatibility with Node.js 15
+  };
+
+  next();
+}
+
 var cors_proxy = require('./lib/cors-anywhere');
 cors_proxy.createServer({
   originBlacklist: originBlacklist,
@@ -44,6 +69,7 @@ cors_proxy.createServer({
     // Do not add X-Forwarded-For, etc. headers, because Heroku already adds it.
     xfwd: false,
   },
-}).listen(port, host, function() {
+  middleware: enableRequestLogging ? [requestResponseLogger] : [],
+}).listen(port, host, function () {
   console.log('Running CORS Anywhere on ' + host + ':' + port);
 });

@@ -167,6 +167,24 @@ export CORSANYWHERE_RATELIMIT='50 3 my.example.com my2.example.com'
 node server.js
 ```
 
+### Environment Variables
+
+CORS Anywhere can be configured using the following environment variables:
+
+- **`HOST`**: Specifies the host the server will listen on. Default is `0.0.0.0`.
+
+- **`PORT`**: Specifies the port the server will listen on. Default is `8080`.
+
+- **`CORSANYWHERE_BLACKLIST`**: A comma-separated list of origins that are blocked from accessing the proxy.  
+  Example: `https://bad.example.com,http://bad.example.com`
+
+- **`CORSANYWHERE_WHITELIST`**: A comma-separated list of origins that are allowed to access the proxy.  
+  Example: `https://good.example.com,http://good.example.com`
+
+- **`CORSANYWHERE_RATELIMIT`**: Rate limiting settings to prevent abuse. The format is `requests per period origin`, where `requests` is the maximum number of requests, `period` is the time period in minutes, and `origin` is an optional list of origins that are exempt from rate limits.  
+  Example: `'50 3 my.example.com my2.example.com'` (50 requests per 3 minutes, except for `my.example.com` and `my2.example.com`)
+
+- **`ENABLE_REQUEST_LOGGING`**: When set to `true`, enables logging of request and response details to `stdout`, including request methods, URLs, and headers. Default is `false`.
 
 ## License
 
