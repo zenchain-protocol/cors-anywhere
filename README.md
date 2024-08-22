@@ -186,6 +186,13 @@ CORS Anywhere can be configured using the following environment variables:
 
 - **`ENABLE_REQUEST_LOGGING`**: When set to `true`, enables logging of request and response details to `stdout`, including request methods, URLs, and headers. Default is `false`.
 
+### Docker
+
+```bash
+docker build -t cors-anywhere .
+docker run -p 8080:8080 -e ENABLE_REQUEST_LOGGING="true" cors-anywhere
+```
+
 ## License
 
 Copyright (C) 2013 - 2021 Rob Wu <rob@robwu.nl>
