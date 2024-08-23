@@ -1,0 +1,10 @@
+*.swp
+*.tmp
+*.log
+demo.html
+travis.yml
+Procfile
+
+coverage/
+node_modules/
+test/
