@@ -4,6 +4,9 @@
 demo.html
 travis.yml
 Procfile
+Dockerfile
+.git
+.dockerignore
 
 coverage/
 node_modules/
